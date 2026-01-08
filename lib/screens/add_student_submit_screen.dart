@@ -8,7 +8,7 @@ import 'view_students_screen.dart';
 class AddStudentSubmitScreen extends StatelessWidget {
   AddStudentSubmitScreen({super.key});
 
-  // ✅ inject here so controller always available
+  // ✅ controller injected safely
   final AddStudentSubmitController controller =
   Get.put(AddStudentSubmitController());
 
@@ -25,10 +25,12 @@ class AddStudentSubmitScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         backgroundColor: const Color(0xFFF4F6F8),
+
+        // ================= APP BAR =================
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          backgroundColor: const Color(0xFF8E2DE2),
+          backgroundColor: Colors.teal,
           iconTheme: const IconThemeData(color: Colors.white),
           title: Text(
             "STUDENT DATA",
@@ -38,21 +40,23 @@ class AddStudentSubmitScreen extends StatelessWidget {
               color: Colors.white,
             ),
           ),
+
+          // ================= TAB BAR =================
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50.h),
-            child: Column(
-              children: [
-                // ✅ tabbar with vertical divider effect
-                SizedBox(
-                  height: 48.h,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TabBar(
-                          indicatorColor: Colors.white,
+            child: Container(
+              color: Colors.white, // ✅ white background
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 48.h,
+                    child: Stack(
+                      children: [
+                        TabBar(
+                          indicatorColor: Colors.black, // ✅ black indicator
                           indicatorWeight: 3,
-                          labelColor: Colors.white,
-                          unselectedLabelColor: Colors.white.withOpacity(0.75),
+                          labelColor: Colors.black, // ✅ black text
+                          unselectedLabelColor: Colors.black54,
                           labelStyle: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
@@ -66,25 +70,37 @@ class AddStudentSubmitScreen extends StatelessWidget {
                             Tab(text: "View Student"),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
 
-                // ✅ line below tabbar
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: Colors.white.withOpacity(0.35),
-                ),
-              ],
+                        // ✅ vertical divider between tabs
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 1,
+                            height: 22.h,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // ✅ horizontal line below tabbar
+                  Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
+
+        // ================= TAB VIEWS =================
         body: TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            // TAB 1: ADD STUDENT (same UI)
+            // ================= TAB 1: ADD STUDENT =================
             SingleChildScrollView(
               padding: EdgeInsets.all(16.w),
               child: Column(
@@ -115,6 +131,7 @@ class AddStudentSubmitScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 16.h),
+
                         LayoutBuilder(
                           builder: (context, constraints) {
                             final isNarrow = constraints.maxWidth < 680;
@@ -139,7 +156,9 @@ class AddStudentSubmitScreen extends StatelessWidget {
                             );
                           },
                         ),
+
                         SizedBox(height: 18.h),
+
                         Obx(() {
                           final loading = controller.isSubmitting.value;
                           return SizedBox(
@@ -176,7 +195,7 @@ class AddStudentSubmitScreen extends StatelessWidget {
               ),
             ),
 
-            // TAB 2: VIEW STUDENT (embedded)
+            // ================= TAB 2: VIEW STUDENT =================
             ViewStudentsScreen(),
           ],
         ),
@@ -185,6 +204,7 @@ class AddStudentSubmitScreen extends StatelessWidget {
   }
 }
 
+// ================= BOARD DROPDOWN =================
 class _BoardDropdown extends StatelessWidget {
   final AddStudentSubmitController controller;
   const _BoardDropdown({required this.controller});
@@ -194,8 +214,10 @@ class _BoardDropdown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Board Name",
-            style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600)),
+        Text(
+          "Board Name",
+          style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
+        ),
         SizedBox(height: 8.h),
         Obx(() {
           return DropdownButtonFormField<String>(
@@ -226,6 +248,7 @@ class _BoardDropdown extends StatelessWidget {
   }
 }
 
+// ================= FILE PICKER =================
 class _FilePickerField extends StatelessWidget {
   final AddStudentSubmitController controller;
   const _FilePickerField({required this.controller});
@@ -235,8 +258,10 @@ class _FilePickerField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Upload",
-            style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600)),
+        Text(
+          "Upload",
+          style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
+        ),
         SizedBox(height: 8.h),
         Obx(() {
           return InkWell(
@@ -251,15 +276,17 @@ class _FilePickerField extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 10.w, vertical: 8.h),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6.r),
                       border: Border.all(color: const Color(0xFFD0D5DD)),
                       color: const Color(0xFFF9FAFB),
                     ),
-                    child: Text("Choose file",
-                        style: TextStyle(fontSize: 12.sp)),
+                    child: Text(
+                      "Choose file",
+                      style: TextStyle(fontSize: 12.sp),
+                    ),
                   ),
                   SizedBox(width: 10.w),
                   Expanded(
