@@ -4,11 +4,6 @@ import 'package:get/get.dart';
 class HomeScreenController extends GetxController {
   final isLoading = false.obs;
 
-  // ✅ 0: Productivity Report
-  // ✅ 1: Follow Up Task
-  // ✅ 2: Home (FAB)
-  // ✅ 3: Lead Disposition
-  // ✅ 4: Today's Follow Up
   final bottomIndex = 2.obs; // start from Home
 
   void onBottomTap(int index) {
@@ -25,6 +20,7 @@ class HomeScreenController extends GetxController {
   }
 
   // 9 dashboard values
+  final todayfollowup = 0.obs;
   final totalLeads = 0.obs;
   final todaysLeads = 0.obs;
   final hotLeads = 0.obs;
@@ -36,6 +32,7 @@ class HomeScreenController extends GetxController {
   final totalCounsellor = 0.obs;
 
   late final List<DashboardCardItem> dashboardCards = [
+    DashboardCardItem(title: "Today Follow up", value: totalLeads, icon: Icons.how_to_reg),
     DashboardCardItem(title: "Total Leads", value: totalLeads, icon: Icons.groups),
     DashboardCardItem(title: "Today's Leads", value: todaysLeads, icon: Icons.today),
     DashboardCardItem(title: "Hot Leads", value: hotLeads, icon: Icons.local_fire_department),
@@ -57,7 +54,7 @@ class HomeScreenController extends GetxController {
     isLoading.value = true;
 
     await Future.delayed(const Duration(milliseconds: 700));
-
+    todayfollowup.value = 0;
     totalLeads.value = 2;
     todaysLeads.value = 0;
     hotLeads.value = 1;
