@@ -57,14 +57,14 @@ class _AdminDrawerState extends State<AdminDrawer> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    _buildDrawerItem("Dashboard", Icons.home, AdminRoutes.homescreen, currentRoute, Colors.blue),
+                    _buildDrawerItem("Dashboard", Icons.home, AdminRoutes.leadsstatus, currentRoute, Colors.blue),
                     _buildDrawerItem("Settings", Icons.settings, AdminRoutes.homescreen, currentRoute, Colors.pink),
                     _buildDrawerItem("Lead Manager", Icons.person, AdminRoutes.homescreen, currentRoute, Colors.brown),
                     _buildDrawerItem("Lead Report", Icons.check_circle, AdminRoutes.homescreen, currentRoute, Colors.orange),
                     _buildDrawerItem("Row Data", Icons.assignment, AdminRoutes.homescreen, currentRoute, Colors.cyan),
                     _buildDrawerItem("Communication", Icons.class_, AdminRoutes.homescreen, currentRoute, Colors.green),
                     _buildDrawerItem("SMS Reports", Icons.notifications, AdminRoutes.homescreen, currentRoute, Colors.indigo),
-                    _buildDrawerItem("Students Data", Icons.group, AdminRoutes.homescreen, currentRoute, Colors.purple),
+                    _buildDrawerItem("Students Data", Icons.group, AdminRoutes.studentdata, currentRoute, Colors.purple),
                     _buildDrawerItem("Marketing Materials", Icons.assessment, AdminRoutes.homescreen, currentRoute, Colors.teal),
 
                     SizedBox(height: 20.h),

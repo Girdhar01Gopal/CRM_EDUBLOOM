@@ -9,7 +9,7 @@ class AdminSplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AdminSplashController());  // ⭐ Splash Controller Activated
+    Get.put(AdminSplashController());  //  Splash Controller Activated
 
     return Scaffold(
       backgroundColor: AppColor.White,
