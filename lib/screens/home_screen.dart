@@ -78,15 +78,14 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
 
-      drawer: AdminDrawer(),
+      drawer: const AdminDrawer(),
 
-      // ✅ Center FAB Home (fab type)
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Obx(() {
         final isSelected = controller.bottomIndex.value == 2;
         return FloatingActionButton(
           elevation: 2,
-          backgroundColor: isSelected ? Colors.white : Colors.white,
+          backgroundColor: Colors.white,
           onPressed: () => controller.onBottomTap(2),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.r),
@@ -99,7 +98,6 @@ class HomeScreen extends StatelessWidget {
         );
       }),
 
-      // ✅ BottomAppBar: 2 left + notch + 2 right (dark navy)
       bottomNavigationBar: Obx(() {
         return SafeArea(
           top: false,
@@ -112,7 +110,6 @@ class HomeScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // LEFT 2
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -133,10 +130,8 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // GAP for FAB
                   SizedBox(width: 30.w),
 
-                  // RIGHT 2
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -163,7 +158,7 @@ class HomeScreen extends StatelessWidget {
         );
       }),
 
-      // ✅ BODY (UPDATED): more scrollable + responsive, rest same
+      // ✅ BODY (cards clickable)
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -175,18 +170,14 @@ class HomeScreen extends StatelessWidget {
           top: false,
           child: LayoutBuilder(
             builder: (context, constraints) {
-              // ✅ Responsive grid rules
               final crossAxisCount = constraints.maxWidth < 380 ? 2 : 3;
               final aspect = constraints.maxWidth < 380 ? 1.55 : 1.35;
 
               return Padding(
                 padding: EdgeInsets.all(14.w),
                 child: GridView.builder(
-                  // ✅ always scrollable + smooth
                   physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.only(
-                    bottom: 90.h, // ✅ space for bottom bar + FAB
-                  ),
+                  padding: EdgeInsets.only(bottom: 90.h),
                   itemCount: cards.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: crossAxisCount,
@@ -196,11 +187,16 @@ class HomeScreen extends StatelessWidget {
                   ),
                   itemBuilder: (context, index) {
                     final item = cards[index];
-                    return _DashboardCard(
-                      title: item.title,
-                      value: item.value.value,
-                      icon: item.icon,
-                    );
+
+                    // ✅ reactive value + clickable
+                    return Obx(() {
+                      return _DashboardCard(
+                        title: item.title,
+                        value: item.value.value,
+                        icon: item.icon,
+                        onTap: () => controller.onCardTap(item),
+                      );
+                    });
                   },
                 ),
               );
@@ -264,68 +260,77 @@ class _DashboardCard extends StatelessWidget {
   final String title;
   final int value;
   final IconData icon;
+  final VoidCallback onTap;
 
   const _DashboardCard({
     required this.title,
     required this.value,
     required this.icon,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(14.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10.r,
-            offset: const Offset(0, 6),
+        child: Container(
+          padding: EdgeInsets.all(14.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10.r,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 42.w,
-            height: 42.w,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFEEF0),
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: Icon(icon, color: Colors.redAccent, size: 22.sp),
-          ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w600,
-                  ),
+          child: Row(
+            children: [
+              Container(
+                width: 42.w,
+                height: 42.w,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFEEF0),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
-                SizedBox(height: 6.h),
-                Text(
-                  value.toString(),
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    color: Colors.redAccent,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Icon(icon, color: Colors.redAccent, size: 22.sp),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                    Text(
+                      value.toString(),
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

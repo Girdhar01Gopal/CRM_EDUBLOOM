@@ -60,7 +60,6 @@ dependencies:
   package_info_plus:
   hive:
   connectivity_plus:
-  share_plus:
   fl_chart:
   getx_super_snackbar:
   win32:

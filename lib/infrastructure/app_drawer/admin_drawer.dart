@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../infrastructure/routes/admin_routes.dart';
-import '../../utils/constants/color_constants.dart';
 
 class AdminDrawer extends StatefulWidget {
+  const AdminDrawer({super.key});
+
   @override
-  _AdminDrawerState createState() => _AdminDrawerState();
+  State<AdminDrawer> createState() => _AdminDrawerState();
 }
 
 class _AdminDrawerState extends State<AdminDrawer> {
-  String? hoveredRoute;
+  // ✅ ONE PLACE TO CONTROL SPACING
+  final double itemVerticalPadding = 7.h; // gap inside item
+  final double dividerVerticalGap = 0.h; // space above/below divider
+  final double itemFontSize = 13.sp; // text size
+  final double iconSize = 22.sp; // icon size
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +27,7 @@ class _AdminDrawerState extends State<AdminDrawer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ==================== UPDATED HEADER ====================
+            // ==================== HEADER ====================
             Container(
               width: double.infinity,
               height: 150.h,
@@ -33,22 +38,18 @@ class _AdminDrawerState extends State<AdminDrawer> {
                   end: Alignment.bottomRight,
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 90.w,
-                    height: 90.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/EDUBLOOM.png'), // Logo path
-                        fit: BoxFit.cover,
-                      ),
+              child: Center(
+                child: Container(
+                  width: 90.w,
+                  height: 90.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.r),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/images/EDUBLOOM.png'),
+                      fit: BoxFit.cover,
                     ),
                   ),
-
-                ],
+                ),
               ),
             ),
 
@@ -57,20 +58,84 @@ class _AdminDrawerState extends State<AdminDrawer> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    _buildDrawerItem("Dashboard", Icons.home, AdminRoutes.leadsstatus, currentRoute, Colors.blue),
-                    _buildDrawerItem("Settings", Icons.settings, AdminRoutes.homescreen, currentRoute, Colors.pink),
-                    _buildDrawerItem("Lead Manager", Icons.person, AdminRoutes.homescreen, currentRoute, Colors.brown),
-                    _buildDrawerItem("Lead Report", Icons.check_circle, AdminRoutes.homescreen, currentRoute, Colors.orange),
-                    _buildDrawerItem("Row Data", Icons.assignment, AdminRoutes.homescreen, currentRoute, Colors.cyan),
-                    _buildDrawerItem("Communication", Icons.class_, AdminRoutes.homescreen, currentRoute, Colors.green),
-                    _buildDrawerItem("SMS Reports", Icons.notifications, AdminRoutes.homescreen, currentRoute, Colors.indigo),
-                    _buildDrawerItem("Students Data", Icons.group, AdminRoutes.studentdata, currentRoute, Colors.purple),
-                    _buildDrawerItem("Marketing Materials", Icons.assessment, AdminRoutes.homescreen, currentRoute, Colors.teal),
+                    _buildDrawerItem(
+                      title: "Dashboard",
+                      icon: Icons.home,
+                      route: AdminRoutes.leadsstatus,
+                      currentRoute: currentRoute,
+                      iconColor: Colors.blue,
+                    ),
+                    _buildDrawerItem(
+                      title: "Settings",
+                      icon: Icons.settings,
+                      route: AdminRoutes.studentdata,
+                      currentRoute: currentRoute,
+                      iconColor: Colors.pink,
+                    ),
+                    _buildDrawerItem(
+                      title: "Lead Manager",
+                      icon: Icons.person,
+                      route: AdminRoutes.studentdata,
+                      currentRoute: currentRoute,
+                      iconColor: Colors.brown,
+                    ),
+                    _buildDrawerItem(
+                      title: "Lead Report",
+                      icon: Icons.check_circle,
+                      route: AdminRoutes.studentdata,
+                      currentRoute: currentRoute,
+                      iconColor: Colors.orange,
+                    ),
+                    _buildDrawerItem(
+                      title: "Row Data",
+                      icon: Icons.assignment,
+                      route: AdminRoutes.studentdata,
+                      currentRoute: currentRoute,
+                      iconColor: Colors.cyan,
+                    ),
+                    _buildDrawerItem(
+                      title: "Communication",
+                      icon: Icons.class_,
+                      route: AdminRoutes.studentdata,
+                      currentRoute: currentRoute,
+                      iconColor: Colors.green,
+                    ),
+                    _buildDrawerItem(
+                      title: "SMS Reports",
+                      icon: Icons.notifications,
+                      route: AdminRoutes.studentdata,
+                      currentRoute: currentRoute,
+                      iconColor: Colors.indigo,
+                    ),
+                    _buildDrawerItem(
+                      title: "Students Data",
+                      icon: Icons.group,
+                      route: AdminRoutes.studentdata,
+                      currentRoute: currentRoute,
+                      iconColor: Colors.purple,
+                    ),
+                    _buildDrawerItem(
+                      title: "Marketing Materials",
+                      icon: Icons.assessment,
+                      route: AdminRoutes.studentdata,
+                      currentRoute: currentRoute,
+                      iconColor: Colors.teal,
+                    ),
 
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 6.h),
 
-                    // ==================== LOGOUT TEXT ====================
-                    _buildDrawerItem("LOG OUT", Icons.logout, AdminRoutes.LOGIN, currentRoute, Colors.red, isLogout: true),
+                    // ==================== LOGOUT ====================
+                    _buildDrawerItem(
+                      title: "LOG OUT",
+                      icon: Icons.logout,
+                      route: AdminRoutes.LOGIN,
+                      currentRoute: currentRoute,
+                      iconColor: Colors.red,
+                      textColor: Colors.white, // ✅ logout text white
+                      tileColor: Colors.red, // ✅ optional: red background
+                      isLogout: true,
+                      isLastItem: true,
+                    ),
                   ],
                 ),
               ),
@@ -81,31 +146,66 @@ class _AdminDrawerState extends State<AdminDrawer> {
     );
   }
 
-  // Drawer Item Widget for Logout with additional parameters for customization
-  Widget _buildDrawerItem(String title, IconData icon, String route, String currentRoute, Color iconColor, {bool isLogout = false}) {
-    bool isSelected = currentRoute == route;
-    bool isLastItem = route == AdminRoutes.LOGIN; // Check if the item is the last one
+  Widget _buildDrawerItem({
+    required String title,
+    required IconData icon,
+    required String route,
+    required String currentRoute,
+    required Color iconColor,
+    Color textColor = Colors.black,     // ✅ ADD
+    Color? tileColor,                  // ✅ ADD (optional)
+    bool isLogout = false,
+    bool isLastItem = false,
+  }) {
+    final bool isSelected = currentRoute == route;
 
     return Column(
       children: [
         ListTile(
+          dense: true,
+          visualDensity: const VisualDensity(vertical: -3),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 16.w,
+            vertical: itemVerticalPadding,
+          ),
           selected: isSelected,
-          onTap: () => Get.toNamed(route),
+          selectedTileColor: Colors.black.withOpacity(0.04),
+          tileColor: tileColor, // ✅ APPLY optional background
+          onTap: () {
+            if (isLogout) {
+              // ✅ Clear stack on logout
+              Get.offAllNamed(route);
+            } else {
+              Get.toNamed(route);
+            }
+          },
           leading: Icon(
             icon,
-            color: isLogout ? Colors.red : iconColor, // Red color for logout icon
+            size: iconSize,
+            color: isLogout ? Colors.white : iconColor, // ✅ if logout bg red, icon white
           ),
           title: Text(
             title,
             style: TextStyle(
-              fontWeight: FontWeight.bold, // Make the text bold
-              color: Colors.black, // Set text color to black for all items
+              fontSize: itemFontSize,
+              fontWeight: FontWeight.w700,
+              color: textColor, // ✅ APPLY textColor
             ),
           ),
         ),
-        // Add a divider between items except for the last one
-        if (!isLastItem) Divider(thickness: 1, color: Colors.grey.shade300),
-        if (isSelected) SizedBox(height: 8.h), // Spacer when selected
+
+        if (!isLastItem)
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 12.w,
+              vertical: dividerVerticalGap,
+            ),
+            child: Divider(
+              height: 1,
+              thickness: 1,
+              color: Colors.grey.shade300,
+            ),
+          ),
       ],
     );
   }

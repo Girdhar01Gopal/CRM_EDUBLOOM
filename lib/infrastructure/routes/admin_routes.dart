@@ -4,6 +4,7 @@ import '../../bindings/LeadsStatusBindings.dart';
 import '../../bindings/add_student_submit_binding.dart';
 import '../../bindings/home_binding.dart';
 import '../../bindings/login_binding.dart';
+import '../../bindings/today_followup_leads_binding.dart';
 import '../../bindings/view_students_binding.dart';
 import '../../controllers/LeadsStatusController.dart';
 import '../../screens/LeadsStatusScreen.dart';
@@ -11,6 +12,7 @@ import '../../screens/add_student_submit_screen.dart';
 import '../../screens/admin_splash_screen.dart';
 import '../../screens/home_screen.dart';
 import '../../screens/login_screen.dart';
+import '../../screens/today_followup_leads_screen.dart';
 import '../../screens/view_students_screen.dart';
 
 
@@ -24,6 +26,8 @@ class AdminRoutes {
   static const leadsstatus = '/leadsstatus';
   static const studentdata = '/studentdata';
   static const viewstudentdata = '/viewstudentdata';
+  static const todayfollowupleads = '/todayfollowupleads';
+
 
 
 
@@ -71,6 +75,12 @@ class AdminRoutes {
       name: viewstudentdata,
       page: () => ViewStudentsScreen(),
       binding: ViewStudentsBinding(),
+    ),
+
+    GetPage(
+      name: todayfollowupleads,
+      page: () => TodayFollowUpLeadsScreen(),
+      binding: TodayFollowUpLeadsBinding(),
     ),
 
   ];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../infrastructure/routes/admin_routes.dart';
 
 class HomeScreenController extends GetxController {
   final isLoading = false.obs;
@@ -9,17 +10,20 @@ class HomeScreenController extends GetxController {
   void onBottomTap(int index) {
     bottomIndex.value = index;
 
-    // Routing later if you want (optional)
-    // switch (index) {
-    //   case 0: Get.toNamed(AdminRoutes.productivityReport); break;
-    //   case 1: Get.toNamed(AdminRoutes.followUpTask); break;
-    //   case 2: break;
-    //   case 3: Get.toNamed(AdminRoutes.leadDisposition); break;
-    //   case 4: Get.toNamed(AdminRoutes.todaysFollowUp); break;
-    // }
+    switch (index) {
+    // case 0: Get.toNamed(AdminRoutes.productivityReport); break;
+    // case 1: Get.toNamed(AdminRoutes.followUpTask); break;
+    // case 2: break;
+    // case 3: Get.toNamed(AdminRoutes.leadDisposition); break;
+      case 4:
+        Get.toNamed(AdminRoutes.todayfollowupleads);
+        break;
+      default:
+        break;
+    }
   }
 
-  // 9 dashboard values
+  // Dashboard values
   final todayfollowup = 0.obs;
   final totalLeads = 0.obs;
   final todaysLeads = 0.obs;
@@ -31,18 +35,42 @@ class HomeScreenController extends GetxController {
   final totalClass = 0.obs;
   final totalCounsellor = 0.obs;
 
+  // Dashboard cards
   late final List<DashboardCardItem> dashboardCards = [
-    DashboardCardItem(title: "Today Follow up", value: totalLeads, icon: Icons.how_to_reg),
-    DashboardCardItem(title: "Total Leads", value: totalLeads, icon: Icons.groups),
-    DashboardCardItem(title: "Today's Leads", value: todaysLeads, icon: Icons.today),
-    DashboardCardItem(title: "Hot Leads", value: hotLeads, icon: Icons.local_fire_department),
-    DashboardCardItem(title: "Today's Completed Calls", value: todaysCompletedCalls, icon: Icons.call),
-    DashboardCardItem(title: "Contacted", value: contacted, icon: Icons.support_agent),
-    DashboardCardItem(title: "Registered", value: registered, icon: Icons.how_to_reg),
-    DashboardCardItem(title: "Pending", value: pending, icon: Icons.pending_actions),
-    DashboardCardItem(title: "Total Class", value: totalClass, icon: Icons.class_),
-    DashboardCardItem(title: "Total Counsellor", value: totalCounsellor, icon: Icons.person_pin),
+    DashboardCardItem(
+      title: "Today Follow up",
+      value: todayfollowup,
+      icon: Icons.today,
+      route: AdminRoutes.todayfollowupleads, // ✅ only this route given by you
+    ),
+    DashboardCardItem(title: "Total Leads", value: totalLeads, icon: Icons.groups,
+      route: AdminRoutes.todayfollowupleads,),
+    DashboardCardItem(title: "Today's Leads", value: todaysLeads, icon: Icons.today,
+      route: AdminRoutes.todayfollowupleads,),
+    DashboardCardItem(title: "Hot Leads", value: hotLeads, icon: Icons.local_fire_department,
+      route: AdminRoutes.todayfollowupleads,),
+    DashboardCardItem(title: "Today's Completed Calls", value: todaysCompletedCalls, icon: Icons.call,
+      route: AdminRoutes.todayfollowupleads,),
+    DashboardCardItem(title: "Contacted", value: contacted, icon: Icons.support_agent,
+      route: AdminRoutes.todayfollowupleads,),
+    DashboardCardItem(title: "Registered", value: registered, icon: Icons.how_to_reg,
+      route: AdminRoutes.todayfollowupleads,),
+    DashboardCardItem(title: "Pending", value: pending, icon: Icons.pending_actions,
+      route: AdminRoutes.todayfollowupleads,),
+    DashboardCardItem(title: "Total Class", value: totalClass, icon: Icons.class_,
+      route: AdminRoutes.todayfollowupleads,),
+    DashboardCardItem(title: "Total Counsellor", value: totalCounsellor, icon: Icons.person_pin,
+      route: AdminRoutes.todayfollowupleads,),
   ];
+
+  // ✅ tap handler
+  void onCardTap(DashboardCardItem item) {
+    if (item.route != null && item.route!.isNotEmpty) {
+      Get.toNamed(item.route!);
+    } else {
+      Get.snackbar("Info", "${item.title} - Coming soon");
+    }
+  }
 
   @override
   void onInit() {
@@ -54,6 +82,7 @@ class HomeScreenController extends GetxController {
     isLoading.value = true;
 
     await Future.delayed(const Duration(milliseconds: 700));
+
     todayfollowup.value = 0;
     totalLeads.value = 2;
     todaysLeads.value = 0;
@@ -73,10 +102,12 @@ class DashboardCardItem {
   final String title;
   final RxInt value;
   final IconData icon;
+  final String? route;
 
   DashboardCardItem({
     required this.title,
     required this.value,
     required this.icon,
+    this.route,
   });
 }
